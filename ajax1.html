@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Ajax 1 - Text File</title>
+</head>
+<body>
+	<button id="button">Get Text File</button>
+	<hr>
+	<div id="text"></div>
+
+	<script>
+		// create event listener
+		document.getElementById('button').addEventListener('click', loadText);
+
+		function loadText() {
+
+			// Create the XHR object 
+			var xhr = new XMLHttpRequest();
+
+			// open - type, url/file, async
+			xhr.open('GET','sample_readonly.txt',true);
+
+			// OPTIONAL - used for loaders or spinners
+			xhr.onprogress = function() {
+				console.log(xhr.readyState);
+				// in this are you can run spinner here while user is waiting
+			}
+
+
+			// NEW WAY - onload will run only if its ready
+			xhr.onload = function(){
+				//console.log(xhr.readyState); - this returns 4
+				if(this.status == 200) {
+					//console.log(this.responseText);
+					document.getElementById('text').innerHTML = this.responseText;
+				}
+				else if(this.status == 404){
+					document.getElementById('text').innerHTML = "file not found";
+				}
+				else if(this.status == 403){
+					// this does not work for some reason probably becase my account is admin and is allowed to read all these files
+					document.getElementById('text').innerHTML = "file forbidden";
+				}
+			}
+
+			// HANDLE ERROR ALWAYS
+			xhr.onerror = function(){
+				console.log('Request Error..');
+				// tell the user there is an error.
+			}
+
+			// OLD WAY - checks the ready state first before runing
+			// xhr.onreadystatechange = function(){
+			// 	console.log(xhr.readyState); - this returns 1,2,3,4
+			// 	if(this.readyState == 4 && this.status == 200){
+			// 		//console.log(this.responseText);
+			// 	}
+			// }
+
+			// readyState Values
+			// 0: request not initialized
+			// 1: server connection stablished
+			// 2: request received
+			// 3: processing
+			// 4: request finished and response is ready
+
+			// HTTP Statuses
+			// 200: ok
+			// 403: forbidden
+			// 404: not found
+
+			xhr.send();
+
+		}
+	</script>
+</body>
+</html>
