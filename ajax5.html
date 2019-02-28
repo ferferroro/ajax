@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Ajax 5 - FETCH from PHP and MyQL</title>
+</head>
+<body>
+	<button id="button">Get Users</button>
+	<hr>
+	<h1>Users</h1>
+	<div id="users"></div>
+
+	<script>
+		document.getElementById('button').addEventListener('click', loadUsers);
+
+		function loadUsers(){
+
+			// create the object - or instantiate
+			// after instantiated - we can now use the properties ---
+			var xhr = new XMLHttpRequest();
+			
+			// use propertie called 'open'
+			//xhr.open('GET','user.json',true);
+			xhr.open('GET','users.php',true);
+
+			// JSON ON FILE NEEDS TO END ON A NEW LINE!! if you got this error then add new line on end of your JSON FILE
+
+			// use propoerty called onload - means the request is done and response is ready(go back to ajax1.html if confused with this statuses)
+			xhr.onload = function(){
+
+				// 200 is good
+				if(this.status == 200){
+
+					// remember we are fetching json so parse it first
+					var users = JSON.parse(this.responseText);
+
+					var output = '';
+
+					for(var i in users){
+						output += '<ul>' + 
+						'<li>ID:'   + users[i].id   + '</li>' +
+						'<li>Name:' + users[i].name + '</li>' +
+						'</ul>';
+					}
+
+					document.getElementById('users').innerHTML = output;
+				}
+				
+			}
+
+			xhr.send();
+		}
+
+	</script>
+</body>
+</html>

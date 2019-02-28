@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Ajax 3 - External API</title>
+	<style>
+		#users ul{
+			list-style: none;
+		}
+		
+	</style>
+</head>
+<body>
+	<button id="button">Load jsonplaceholder Users</button>
+	<hr>
+	<h1>Github Users</h1>
+	<div id="users"></div>
+
+	<script>
+		
+		document.getElementById('button').addEventListener('click', loadUsers);
+
+		function loadUsers(){
+			var xhr = new XMLHttpRequest;
+
+			xhr.open('GET','https://jsonplaceholder.typicode.com/users',true);
+
+			// git hub users : https://api.github.com/users
+
+			xhr.onload = function(){
+
+				if(this.status == 200){
+					var users = JSON.parse(this.responseText);
+
+					var output = '';
+
+					for(var i in users){
+						output += '<ul>' + 
+						'<li>ID:' + users[i].id + '</li>' +
+						'<li>Name:' + users[i].name + '</li>' +
+						'<li>Email:' + users[i].email + '</li>' +
+						'</ul>';
+					}
+
+					document.getElementById('users').innerHTML = output;
+				}
+			}
+
+			xhr.send();
+		}
+
+	</script>
+</body>
+</html>
